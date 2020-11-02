@@ -45,15 +45,25 @@ public class Controller{
         List<Book> t = serviceProcess.getAllBook();
         return serviceProcess.getAllBook();
     }
+    // post thực hiên cả 2 nhiệm vụ thêm và chỉnh sửa book không sửa student
     @RequestMapping(value = "/book",method = RequestMethod.POST)
     @ResponseBody
     public void createbook(@RequestBody Book book){
         serviceProcess.createBook(book);
     }
+    /*
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    lúc request book mà không truyền đầy đủ các trường thì toàn bộ các
+    trường còn thiếu không cần biết trong db có dữ liệu hay không đều bị chuyển thành
+    null ========>  gây mất mát dữ liệu
+    ///////
+    put thực hiện khi có học sinh sách
+
+     */
     @RequestMapping(value = "/book",method = RequestMethod.PUT)
     @ResponseBody
     public void putbook(@RequestBody Book book){
-        serviceProcess.createBook(book);
+        serviceProcess.updatebook(book, book.getId());
     }
     @RequestMapping(value = "/book/{id}",method = RequestMethod.DELETE)
     @ResponseBody

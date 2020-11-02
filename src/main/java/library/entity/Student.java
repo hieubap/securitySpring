@@ -1,7 +1,5 @@
 package library.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -15,16 +13,16 @@ public class Student implements Serializable {
     private String name;
     private String mssv;
 
-    @OneToMany(mappedBy = "studentid" , cascade = CascadeType.ALL,
-            orphanRemoval = true, targetEntity = Book.class)
+    @OneToMany(mappedBy = "studentid" , cascade = CascadeType.ALL)
     private List<Book> books;
 
     public Student(){}
 
     /*
     để tránh lỗi stackoverflow
+    không cần @JsonManagedReference cx đc
      */
-    @JsonManagedReference
+//    @JsonManagedReference
     public List<Book> getBooks() {
         return books;
     }

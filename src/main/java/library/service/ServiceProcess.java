@@ -1,5 +1,6 @@
 package library.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import library.entity.Book;
 import library.entity.BorrowBook;
 import library.entity.Student;
@@ -47,6 +48,11 @@ public class ServiceProcess {
     }
     public void createBook(Book book){
         repositoryBook.saveAndFlush(book);
+    }
+    @JsonIgnore
+    public void updatebook(Book book, Long id){
+        repositoryBook.findById(id).get().setStudent(book.getStudents());
+//        repositoryBook.save(book);
     }
 
     public void deleteBook(long id){
