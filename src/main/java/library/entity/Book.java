@@ -1,7 +1,6 @@
 package library.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,69 +14,53 @@ public class Book implements Serializable {
     private String name;
     private String type;
     private String status;
+    private Long bookshelveid;
+    private Long roomnumber;
 
     /*
-    ?????????????????  Bug  ?????????????????
-    Cannot delete or update a parent row: a foreign key constraint fails ......
-    khi thay đổi entity sẽ làm ảnh hưởng tới thông tin trường từ entity khác
-    có khóa ngoại tới entity này
-    =>
-    + xóa các forgein key không cần thiết
-    + để cascade ở all hoặc remove (!!!!!!!!!!!!!!!!!!)
-
-     */
-    @ManyToOne( cascade = CascadeType.ALL)
-    @JoinColumn( name = "id_student")
-    /*
-    toàn bộ tương tác với student ở đây sẽ thay đổi thông tin trong bảng student
-    + nếu tạo một student mới ở đây thì trong bảng student sẽ tạo ra một student mới.
-    + còn nếu cập nhật student tại đây thì các trường trong student cũng thay đổi theo
-
-    *** trùng id thì cập nhật còn khác thì tạo mới
-
-    !!!!!!!!!!!  lưu ý
-    nếu lúc truyền json chỉ truyền duy nhất giá trị id thì toàn bộ các
-    thông tin khác trong student sẽ null hết
     !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    có thể khai báo ntn để có thể sửa lại trường id_borrow chứa khóa ngoại
+    => không cần truyền hẳn Session nên không sợ mất mát dữ liệu từ
+    bảng borrowbook
+
+
      */
-    private Student studentid;
+
+    /*
+    cascade = All thì khi xóa session thì book cũng bị xóa theo
+    orphanRemoval cho phép xóa dữ liệu ngay cả khi có khóa ngoại từ entity cha chiếu tới nó
+
+     */
+    @OneToOne(mappedBy = "book",orphanRemoval = true)
+//    @JoinColumn(name = "sessionid",updatable = false,insertable = false)
+    private Session borrowBook;
+
     public Book(){}
 
-    /*
-    ????????????   Bug  ?????????????????????????
-    StackOverflowError
-    => @JsonBackReference để tránh lỗi khi truy vấn dữ liệu
-     */
-    @JsonBackReference
-    /*
-    dùng chữ cái đầu in thường không sẽ bị null khi request từ json (chưa chắc)
-     */
-    public Student getStudents() {
-        return studentid;
+
+    public Long getBookshelveid() {
+        return bookshelveid;
     }
 
-    /*
-    ????????????   Bug  ?????????????????????????
-    + not-null property references a null or transient value : library.entity.Book.studentid
-    $$$$$$$$$$$ Solve $$$$$$$$$$$$$$
-    vì trường studentid ta set cho nó not null nên mới có lỗi trên
-    + nếu không nhất thiết khác null thì bỏ nullable = false chỗ @JoinColumn của entity này
-    + do truyền vào "studentid" hoặc "students" : 4 => truyền trong {}  (!!!!!!!!!!)
-    + lúc truyền phải đúng tên trường: nếu entity có trường Student tên students thì tên trường trong
-    json cũng phải là students và ngược lại với studentid cx vậy
-    đương nhiên getter và setter cx phải để đúng tên
-    /////
+    public void setBookshelveid(Long bookshelveid) {
+        this.bookshelveid = bookshelveid;
+    }
 
-    khi đặt tên setter và getter cho studentid thì phải đặt tên đúng với thuộc tính.
-    mặc định hệ thống đặt cho setStudents thì ta đổi thành đúng tên thuộc tính
-    là setStudentid
+    public Long getRoomnumbber() {
+        return roomnumber;
+    }
 
-    vì Student ta đặt tên là studentid chứ không phải students.
-    Nếu không có thể xảy ra lỗi null value ...
-     */
-    public void setStudent(Student students) {
-        System.out.println("id student = " + students.getId());
-        this.studentid = students;
+    public void setRoomnumbber(Long roomnumbber) {
+        this.roomnumber = roomnumbber;
+    }
+
+    @JsonBackReference
+    public Session getBorrowBook() {
+        return borrowBook;
+    }
+
+    public void setBorrowBook(Session borrowBook) {
+        this.borrowBook = borrowBook;
     }
 
     public Long getId() {
@@ -108,10 +91,7 @@ public class Book implements Serializable {
         return status;
     }
 
-    @NotNull
     public void setStatus(String status) {
-        System.out.println("status = " + status);
-        if(status == null) return;
         this.status = status;
     }
 }

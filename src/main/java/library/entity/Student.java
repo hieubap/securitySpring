@@ -1,42 +1,36 @@
 package library.entity;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "student")
 public class Student implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long mssv;
     private String name;
-    private String mssv;
+    private String institute;
+    private String cource;
 
-    @OneToMany(mappedBy = "studentid" , cascade = CascadeType.ALL)
-    private List<Book> books;
+    /*
+    Cannot add or update a child row: a foreign key constraint fails (`mydatabase`.`card`, CONSTRAINT
+     `card_student_id_fk` FOREIGN KEY (`mssv`) REFERENCES `student` (`id`))
+
+     vì khóa ngoại card_student_id_fk từ card trỏ vào nó nên gây ra lỗi
+     đáng nhẽ phải là khóa ngoại từ student trỏ tới card
+     */
+    @OneToOne(mappedBy = "student_info")
+    private CardLibrary cardLibrary;
 
     public Student(){}
 
-    /*
-    để tránh lỗi stackoverflow
-    không cần @JsonManagedReference cx đc
-     */
-//    @JsonManagedReference
-    public List<Book> getBooks() {
-        return books;
+    public Long getMssv() {
+        return mssv;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setMssv(Long mssv) {
+        this.mssv = mssv;
     }
 
     public String getName() {
@@ -47,11 +41,19 @@ public class Student implements Serializable {
         this.name = name;
     }
 
-    public String getMssv() {
-        return mssv;
+    public String getInstitute() {
+        return institute;
     }
 
-    public void setMssv(String mssv) {
-        this.mssv = mssv;
+    public void setInstitute(String institute) {
+        this.institute = institute;
+    }
+
+    public String getCource() {
+        return cource;
+    }
+
+    public void setCource(String cource) {
+        this.cource = cource;
     }
 }
