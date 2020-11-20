@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @ResponseBody
-public class SessionController {
+public class SessionController {// xu li trong service
     @Autowired
     SessionService sessionService;
 
@@ -26,13 +26,19 @@ public class SessionController {
     }
 
     @RequestMapping(value = "/session/create", method = RequestMethod.POST)
-    public void create(@RequestBody Session session) {
+    public EntityResponse<Session> create(@RequestBody Session session) {
         sessionService.create(session);
+        return new EntityResponse<>(HttpStatus.OK,"create Session successful",session);
+    }
+    @RequestMapping(value = "/session/update", method = RequestMethod.POST)
+    public EntityResponse<Session> update(@RequestBody Session session,@RequestParam Long id) {
+        return new EntityResponse<>(HttpStatus.OK,"create Session successful",
+                sessionService.update(session,id));
     }
 
     @RequestMapping(value = "/session/{id}", method = RequestMethod.DELETE)
-    public String delete(@PathVariable Long id) {
+    public EntityResponse<Object> delete(@PathVariable Long id) {
         sessionService.delete(id);
-        return "delete successful";
+        return new EntityResponse<>(HttpStatus.OK, "delete successful",null);
     }
 }

@@ -37,7 +37,7 @@ public class Student implements Serializable {
         this.mssv = mssv;
     }
 
-    public void setAll(Student student){
+    public void set(Student student){
         if (student.getName() != null)
             this.name = student.getName();
         if (student.getCource() != null)

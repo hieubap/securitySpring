@@ -11,7 +11,7 @@ import java.util.List;
 public class CardLibrary {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long numbercard;
+    private Long id;
     private String mssv;
     private Timestamp expiration_date;
     private String status;
@@ -21,22 +21,28 @@ public class CardLibrary {
     @JoinColumn(name = "studentId",insertable = false,updatable = false)
     private Student student_info;
 
-    /*
-    java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row:
-    a foreign key constraint fails (`mydatabase`.`session`, CONSTRAINT `FKguwoeh5u8ubma06drp6vtonf7`
-    FOREIGN KEY (`numbercard`) REFERENCES `card` (`numbercard`))
-
-    ?????????????????????? Bug  ??????????//
-    Referencing column 'mssv' and referenced column 'mssv'
-    in foreign key constraint 'FKrwvc3laoe7gubto2j9lm8w6n1' are incompatible.
-    => lỗi không tương thích dữ liệu: varchar và bigint
-     */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "card")
     private List<Session> list_sessions;
 
+    public void set(CardLibrary cardLibrary){
+        if(cardLibrary.getStatus() != null){
+            this.setStatus(cardLibrary.getStatus());
+        }
+        if(cardLibrary.getExpiration_date() != null){
+            this.setExpiration_date(cardLibrary.getExpiration_date());
+        }
+    }
 
 
     public CardLibrary() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getMssv() {
         return mssv;
@@ -44,23 +50,6 @@ public class CardLibrary {
 
     public void setMssv(String mssv) {
         this.mssv = mssv;
-    }
-
-    public Long getNumbercard() {
-        return numbercard;
-    }
-
-    public void setNumbercard(Long numbercard) {
-        this.numbercard = numbercard;
-    }
-
-    @JsonBackReference
-    public Student getStudent_info() {
-        return student_info;
-    }
-
-    public void setStudent_info(Student studentid) {
-        this.student_info = studentid;
     }
 
     public Timestamp getExpiration_date() {
@@ -79,28 +68,29 @@ public class CardLibrary {
         this.status = status;
     }
 
-//    public Student getStudent() {
-//        return student;
-//    }
-//
-//    public void setStudent(Student student) {
-//        this.student = student;
-//    }
-
-    @JsonBackReference
-    public List<Session> getList_sessions() {
-        return list_sessions;
-    }
-
-    public void setList_sessions(List<Session> listsesions) {
-        this.list_sessions = listsesions;
-    }
-
     public Long getStudentId() {
         return studentId;
     }
 
     public void setStudentId(Long studentId) {
         this.studentId = studentId;
+    }
+
+    @JsonBackReference
+    public Student getStudent_info() {
+        return student_info;
+    }
+
+    public void setStudent_info(Student student_info) {
+        this.student_info = student_info;
+    }
+
+    @JsonBackReference
+    public List<Session> getList_sessions() {
+        return list_sessions;
+    }
+
+    public void setList_sessions(List<Session> list_sessions) {
+        this.list_sessions = list_sessions;
     }
 }

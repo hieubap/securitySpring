@@ -2,7 +2,6 @@ package library.controller;
 
 import library.entity.Student;
 import library.exception.ApiRequestException;
-import library.exception.ApiRequestSuccessfull;
 import library.exceptionhandle.responceEntity.EntityResponse;
 import library.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +26,21 @@ public class StudentController {
 
     @RequestMapping(value = "/student/id={id}", method = RequestMethod.GET)
     public EntityResponse getById(@PathVariable Long id) {
+        if (!studentService.isExist(id))
+            throw new ApiRequestException("this id is not exist");
+
         EntityResponse entityResponse = new EntityResponse(200,
                 new Timestamp(System.currentTimeMillis()),"get ok",studentService.getByID(id));
         return entityResponse;
     }
+
     @RequestMapping(value = "/student/mssv={mssv}", method = RequestMethod.GET)
-    public Student getByMssv(@PathVariable String mssv) {
-        return studentService.getByMssv(mssv);
+    public EntityResponse<Student> getByMssv(@PathVariable String mssv) {
+        if (!studentService.isExist(mssv))
+            throw new ApiRequestException("khong co hoc sinh nao co mssv la:" + mssv + " kiem tra lai!");
+
+        return new EntityResponse<>(HttpStatus.OK,"successful",studentService.getByMssv(mssv));
     }
-
-
     @RequestMapping(value = "/student/find/name={name}", method = RequestMethod.GET)
     public EntityResponse<List<Student>> findbyname(@PathVariable String name) {
         return new EntityResponse<>(HttpStatus.OK,"find ok",studentService.findbyname(name));
@@ -46,33 +50,51 @@ public class StudentController {
         return new EntityResponse<>(HttpStatus.OK,"",studentService.findbymssv(mssv));
     }
     @RequestMapping(value = "/student/find/cource={cource}", method = RequestMethod.GET)
-    public List<Student> findbycource(@PathVariable String cource) {
-        return studentService.findbycource(cource);
+    public EntityResponse<List<Student>> findbycource(@PathVariable String cource) {
+        return new EntityResponse<>(HttpStatus.OK,"find by cource",studentService.findbycource(cource));
     }
     @RequestMapping(value = "/student/find/instute={instute}", method = RequestMethod.GET)
-    public List<Student> findbyinstute(@PathVariable String instute) {
-        return studentService.findbyinstute(instute);
+    public EntityResponse<List<Student>> findbyinstute(@PathVariable String instute) {
+        return new EntityResponse<>(HttpStatus.OK,"find by instute",studentService.findbyinstute(instute)) ;
     }
     @RequestMapping(value = "/student/find/phone={phone}", method = RequestMethod.GET)
-    public List<Student> findbyphone(@PathVariable String phone) {
-        return studentService.findbyphone(phone);
+    public EntityResponse<List<Student>> findbyphone(@PathVariable String phone) {
+        return new EntityResponse<>(HttpStatus.OK,"find by phone",studentService.findbyphone(phone)) ;
     }
-    @RequestMapping(value = "/student/find/gender={gender}", method = RequestMethod.GET)
-    public List<Student> findbygender(@PathVariable boolean gender) {
-
-        throw new ApiRequestException("truong hop nay dang mac loi. se sua lai sau");
-    }
+//    @RequestMapping(value = "/student/find/gender={gender}", method = RequestMethod.GET)
+//    public List<Student> findbygender(@PathVariable boolean gender) {
+//        throw new ApiRequestException("truong hop nay dang mac loi. se sua lai sau");
+//    }
 
     @RequestMapping(value = "/student/create", method = RequestMethod.POST)
-    public void create(@RequestBody Student student){
-        System.out.println("create student");
-        studentService.create(student);
+    public EntityResponse<Student> create(@RequestBody Student student){
+        if (student.getName()== null){
+            throw new ApiRequestException("name of student cant null. enter name");
+        }
+        if (student.getMssv()==null){
+            throw new ApiRequestException("mssv of student cant null. enter mssv");
+        }
+        if (student.getCource()==null){
+            throw new ApiRequestException("cource of student cant null. enter mssv");
+        }
+        if (student.getInstitute()==null){
+            throw new ApiRequestException("institute of student cant null. enter mssv");
+        }
+        if (student.getPhone()==null){
+            throw new ApiRequestException("phone of student cant null. enter mssv");
+        }
 
+        if (studentService.isExist(student.getMssv())){
+            throw new ApiRequestException("this student with mssv: "+student.getMssv()+" is existed.");
+        }
+
+        studentService.save(student);
+        return new EntityResponse<>(HttpStatus.OK,"create successful",student);
     }
 
 
-    @RequestMapping(value = {"/student/update"}, method = RequestMethod.PUT)
-    public void updatebyid(@RequestBody Student student,@RequestParam Long id){
+    @RequestMapping(value = {"/student/update"}, method = RequestMethod.PUT)//?id=
+    public EntityResponse<Student> updatebyid(@RequestBody Student student,@RequestParam Long id){
         if (student.getName()== null){
             throw new ApiRequestException("name of student cant null. enter name");
         }
@@ -86,14 +108,14 @@ public class StudentController {
             throw new ApiRequestException("id cannot null");
         }
         Student buffer = studentService.getByID(id);
-        buffer.setAll(student);
-        studentService.create(buffer);
+        buffer.set(student);
+        studentService.save(buffer);
 
-        throw new ApiRequestSuccessfull("update student successful");
+        return new EntityResponse<>(HttpStatus.OK,"update successful",buffer);
     }
 
     @RequestMapping(value = {"/student/update/mssv={mssv}"}, method = RequestMethod.PUT)
-    public void updatebymssv(@RequestBody Student student,@PathVariable String mssv){
+    public EntityResponse<Student> updatebymssv(@RequestBody Student student,@PathVariable String mssv){
         if (student.getName()== null){
             throw new ApiRequestException("name of student cant null. enter name");
         }
@@ -102,15 +124,18 @@ public class StudentController {
         }
 
         Student student1 = studentService.getByMssv(mssv);
-        student1.setAll(student);
-        studentService.create(student1);
+        student1.set(student);
+        studentService.save(student1);
 
-        throw new ApiRequestSuccessfull("update student successful");
+        return new EntityResponse<>(HttpStatus.OK,"update successful with mssv",student1);
     }
 
-    @RequestMapping(value = "/student/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
+    @RequestMapping(value = "/student/delete/{id}", method = RequestMethod.DELETE)
+    public EntityResponse<Student> delete(@PathVariable Long id) {
+        if(!studentService.isExist(id)){
+            throw new ApiRequestException("khong ton tai sinh vien co id = " + id);
+        }
         studentService.delete(id);
-        throw new ApiRequestSuccessfull("student with id: " + id +" is deleted");
+        return new EntityResponse<>(HttpStatus.OK,"delete successful",null);
     }
 }

@@ -43,21 +43,17 @@ public class SessionService {
     }
     public void create(Session session){
         // kiểm tra thông tin sách và số thẻ request có null không
-                if(session.getBooknumber()== null || session.getNumbercard()== null)
+                if(session.getIdBook()== null || session.getIdCard()== null)
                     throw new ApiRequestException( "cant create Session: Error : booknumber or cardnumber is null");
                 else{
                     // nếu không null thì có tồn tại trong db hay không
-                    if(!cardRepository.existsById(session.getNumbercard()))
+                    if(!cardRepository.existsById(session.getIdCard()))
                         throw new ApiRequestException( "card is not exist");
-                    if(!bookRepository.existsById(session.getBooknumber()))
+                    if(!bookRepository.existsById(session.getIdBook()))
                         throw new ApiRequestException( "book is not exist" );
                 }
                 // kiểm tra book đã được mượn chưa
-                Book headbook = bookRepository.getOne( session.getBooknumber());
-
-//                if(headbook.get){
-//                    throw new ApiRequestException( "this book is borrowed");
-//                }
+                Book headbook = bookRepository.getOne( session.getIdBook());
 
 //                headbook.setStatus("borrowed");
                 bookRepository.save(headbook);
@@ -67,12 +63,16 @@ public class SessionService {
                 session.setStatus("con han");
 
                 sessionRepository.save(session);
-//        throw new ApiRequestSuccessfull( "create successful" );
     }
-    public void update(long id){
-
+    public Session update(Session session,Long id){
+        Session session1 = sessionRepository.getOne(id);
+        session1.set(session);
+        sessionRepository.save(session1);
+        return session1;
     }
     public void delete(long id){
+        if (!isExist(id))
+            throw new ApiRequestException("this session is not exist");
         sessionRepository.deleteById(id);
     }
 }

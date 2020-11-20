@@ -33,11 +33,19 @@ public class BookController {
             return new EntityResponse<>(HttpStatus.OK, "Find all books", books);
 
     }
+    @RequestMapping(value = "books/getOne", method = RequestMethod.GET) //?id=
+    public EntityResponse<Optional<Book>> findBook(@RequestParam Long id) {
+        if (bookService.isExist(id)) {
+            Optional<Book> book = bookService.findBookById(id);
+            return new EntityResponse<>(HttpStatus.OK, "information of book with id = " + id, book);
+        }
+        throw new ApiRequestException("this book is not exist");
+    }
 
     @RequestMapping(value = "/books/add", method = RequestMethod.POST)
     public EntityResponse<Book> addBook(@RequestBody Book book) {
             if (book.getId() == null || book.getHeadBookId() == null) {
-                throw new ApiRequestException("id/headbookid field of book is not null");
+                throw new ApiRequestException("id/ headbookid field of book is not null");
             }
             if (bookService.isExist(book.getId())) {
                 throw new ApiRequestException("The given id is exist !");
@@ -49,15 +57,6 @@ public class BookController {
             book.setId(book.getId());
             bookService.addBook(book);
             return new EntityResponse<>(HttpStatus.CREATED, "Create Successful", book);
-    }
-
-    @RequestMapping(value = "books/getOne", method = RequestMethod.GET)
-    public EntityResponse<Optional<Book>> findBook(@RequestParam Long id) {
-        if (bookService.isExist(id)) {
-            Optional<Book> book = bookService.findBookById(id);
-            return new EntityResponse<>(HttpStatus.OK, "information of book with id = " + id, book);
-        }
-        throw new ApiRequestException("this book is not exist");
     }
 
     @RequestMapping(value = "/books/update", method = RequestMethod.PUT)

@@ -1,7 +1,6 @@
 package library.service;
 
 import library.entity.Student;
-import library.exception.ApiRequestException;
 import library.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,37 +43,17 @@ public class StudentService {
     public List<Student> findbyphone(String phone){
         return studentRepo.findByPhoneContains(phone);
     }
-    public List<Student> findbygender(Boolean gender){
-        return studentRepo.findByGenderContains(gender);
-    }
+//    public List<Student> findbygender(Boolean gender){
+//        return studentRepo.findByGenderContains(gender);
+//    }
 
 
     public boolean isExist(String mssv){
-        if (studentRepo.existsByMssv(mssv))
-            return true;
-        return false;
+        return studentRepo.existsByMssv(mssv);
     }
+    public boolean isExist(Long id){return studentRepo.existsById(id);}
 
-    public void create(Student student){
-        if (student.getName()== null){
-            throw new ApiRequestException("name of student cant null. enter name");
-        }
-        if (student.getMssv()==null){
-            throw new ApiRequestException("mssv of student cant null. enter mssv");
-        }
-        if (student.getCource()==null){
-            throw new ApiRequestException("cource of student cant null. enter mssv");
-        }
-        if (student.getInstitute()==null){
-            throw new ApiRequestException("institute of student cant null. enter mssv");
-        }
-        if (student.getPhone()==null){
-            throw new ApiRequestException("phone of student cant null. enter mssv");
-        }
-
-        if (isExist(student.getMssv())){
-            throw new ApiRequestException("this student with mssv: "+student.getMssv()+" is existed.");
-        }
+    public void save(Student student){
         studentRepo.save(student);
     }
     public void delete(Long id){

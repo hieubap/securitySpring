@@ -12,29 +12,31 @@ public class Session implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long numbercard;
-    private Long booknumber;
-    @ManyToOne
-    @JoinColumn(name = "numbercard",updatable = false,insertable = false)
-    private CardLibrary card;
-/*
-      ??????????????
-      JSON parse error: Cannot construct instance of `library.entity.Book` (although at least one Creator exists):
-      no int/Int-argument constructor/factory method to deserialize from Number value (5)
-      thiếu set và get cho booknumber hoặc nhầm  book với booknumber
-
-
-*/
-    @OneToOne(cascade = CascadeType.ALL)
-    /*
-    nếu không insert và update = false thì sẽ bị thay đổi dữ liệu khi chỉnh sửa tại session
-     */
-    @JoinColumn(name = "booknumber",insertable = false,updatable = false)
-    private Book book;
-
+    private Long idCard;
+    private Long idBook;
     private Date date_borrowed;
     private Date expiration_date;
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "idCard",updatable = false,insertable = false)
+    private CardLibrary card;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idBook",insertable = false,updatable = false)
+    private Book book;
+
+    public void set(Session session){
+        if(session.getDate_borrowed()!=null){
+            setDate_borrowed(session.getDate_borrowed());
+        }
+        if(session.getExpiration_date()!=null){
+            setExpiration_date(session.getExpiration_date());
+        }
+        if (session.getStatus() != null){
+            setStatus(session.getStatus());
+        }
+
+    }
 
     public Session(){}
 
@@ -46,27 +48,22 @@ public class Session implements Serializable {
         this.id = id;
     }
 
-    public Long getNumbercard() {
-        return numbercard;
+    public Long getIdCard() {
+        return idCard;
     }
 
-    public void setNumbercard(Long numbercard) {
-        this.numbercard = numbercard;
+    public void setIdCard(Long numbercard) {
+        this.idCard = numbercard;
     }
 
-    public Long getBooknumber() {
-        return booknumber;
+    public Long getIdBook() {
+        return idBook;
     }
 
-    public void setBooknumber(Long booknumber) {
-        this.booknumber = booknumber;
+    public void setIdBook(Long booknumber) {
+        this.idBook = booknumber;
     }
 
-    //  dễ gây lỗi sau:
-    // Failed to evaluate Jackson deserialization for type [[simple type, class library.entity.Student]]:
-    // com.fasterxml.jackson.databind.JsonMappingException: Multiple back-reference properties with name
-    // 'defaultReference'
-//    @JsonBackReference
     public CardLibrary getCard() {
         return card;
     }

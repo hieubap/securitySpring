@@ -36,7 +36,7 @@ public class Book implements Serializable {
         return headBook;
     }
 
-    public void setBook(Book book){
+    public void set(Book book){
         if(book.getNote() != null){
             this.setNote(book.getNote());
         }
@@ -52,22 +52,7 @@ public class Book implements Serializable {
         this.headBook = headBook;
     }
 
-    /*
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!
-    có thể khai báo ntn để có thể sửa lại trường id_borrow chứa khóa ngoại
-    => không cần truyền hẳn Session nên không sợ mất mát dữ liệu từ
-    bảng borrowbook
-
-
-     */
-
-    /*
-    cascade = All thì khi xóa session thì book cũng bị xóa theo
-    orphanRemoval cho phép xóa dữ liệu ngay cả khi có khóa ngoại từ entity cha chiếu tới nó
-
-     */
     @OneToOne(mappedBy = "book",orphanRemoval = true)
-//    @JoinColumn(name = "sessionid",updatable = false,insertable = false)
     private Session borrowBook;
 
     public Book(){}
