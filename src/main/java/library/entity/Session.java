@@ -25,7 +25,7 @@ public class Session implements Serializable {
 
 
 */
-    @OneToOne(orphanRemoval = false)
+    @OneToOne(cascade = CascadeType.ALL)
     /*
     nếu không insert và update = false thì sẽ bị thay đổi dữ liệu khi chỉnh sửa tại session
      */
@@ -62,7 +62,11 @@ public class Session implements Serializable {
         this.booknumber = booknumber;
     }
 
-    @JsonBackReference
+    //  dễ gây lỗi sau:
+    // Failed to evaluate Jackson deserialization for type [[simple type, class library.entity.Student]]:
+    // com.fasterxml.jackson.databind.JsonMappingException: Multiple back-reference properties with name
+    // 'defaultReference'
+//    @JsonBackReference
     public CardLibrary getCard() {
         return card;
     }
@@ -71,6 +75,7 @@ public class Session implements Serializable {
         this.card = card;
     }
 
+    @JsonBackReference
     public Book getBook() {
         return book;
     }

@@ -1,7 +1,8 @@
 package library.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -11,12 +12,13 @@ public class CardLibrary {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long numbercard;
-    private Long mssv;
+    private String mssv;
     private Timestamp expiration_date;
     private String status;
+    private Long studentId;
 
-    @OneToOne
-    @JoinColumn(name = "mssv",insertable = false,updatable = false)
+    @OneToOne(cascade = CascadeType.ALL) // DDL error
+    @JoinColumn(name = "studentId",insertable = false,updatable = false)
     private Student student_info;
 
     /*
@@ -32,13 +34,15 @@ public class CardLibrary {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "card")
     private List<Session> list_sessions;
 
+
+
     public CardLibrary() {}
 
-    public Long getMssv() {
+    public String getMssv() {
         return mssv;
     }
 
-    public void setMssv(Long mssv) {
+    public void setMssv(String mssv) {
         this.mssv = mssv;
     }
 
@@ -50,6 +54,7 @@ public class CardLibrary {
         this.numbercard = numbercard;
     }
 
+    @JsonBackReference
     public Student getStudent_info() {
         return student_info;
     }
@@ -82,12 +87,20 @@ public class CardLibrary {
 //        this.student = student;
 //    }
 
-//    @JsonBackReference
+    @JsonBackReference
     public List<Session> getList_sessions() {
         return list_sessions;
     }
 
     public void setList_sessions(List<Session> listsesions) {
         this.list_sessions = listsesions;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }
