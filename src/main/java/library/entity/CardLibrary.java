@@ -76,7 +76,6 @@ public class CardLibrary {
         this.studentId = studentId;
     }
 
-    @JsonBackReference
     public Student getStudent_info() {
         return student_info;
     }

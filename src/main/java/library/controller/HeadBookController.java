@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@ResponseBody
 public class HeadBookController {
     private final HeadBookService headbookService;
 
@@ -34,17 +35,6 @@ public class HeadBookController {
 
     @RequestMapping(value = "/headbook/add", method = RequestMethod.POST)
     public EntityResponse<HeadBook> addBook(@RequestBody HeadBook headBook) {
-
-            if (headBook.getId() == null || headBook.getName() == null ||
-            headBook.getAuthor() == null || headBook.getPublisher()== null ||
-            headBook.getPrice() == null || headBook.getNumberOfPages() == null) {
-                throw new ApiRequestException("id/name/author/publisher/price/numberofpage field of headbook is null");
-            }
-            if (headbookService.isExist(headBook.getId())) {
-                throw new ApiRequestException("The given id is exist !");
-            }
-
-            headBook.setId(headBook.getId());
             headbookService.addHeadBook(headBook);
             return new EntityResponse<>(HttpStatus.CREATED, "Create Successful", headBook);
     }

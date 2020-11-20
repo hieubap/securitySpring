@@ -1,7 +1,5 @@
 package library.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -72,7 +70,6 @@ public class Session implements Serializable {
         this.card = card;
     }
 
-    @JsonBackReference
     public Book getBook() {
         return book;
     }

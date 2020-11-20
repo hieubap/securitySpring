@@ -45,13 +45,17 @@ public class BookController {
     @RequestMapping(value = "/books/add", method = RequestMethod.POST)
     public EntityResponse<Book> addBook(@RequestBody Book book) {
             if (book.getId() == null || book.getHeadBookId() == null) {
+//                if (book.getHeadBook()==null)
                 throw new ApiRequestException("id/ headbookid field of book is not null");
             }
-            if (bookService.isExist(book.getId())) {
+            if (book.getId() != null && bookService.isExist(book.getId())) {
                 throw new ApiRequestException("The given id is exist !");
             }
             if (!headBookService.isExist(book.getHeadBookId())){
-                throw new ApiRequestException("this headbook with id = " + book.getHeadBookId() + " is not exist!");
+//                if (book.getHeadBook()!=null){
+//                    headBookService.addHeadBook(book.getHeadBook());
+//                }
+                throw new ApiRequestException("this headbook with id = " + book.getHeadBookId() + " is not exist! create headbook");
             }
 
             book.setId(book.getId());

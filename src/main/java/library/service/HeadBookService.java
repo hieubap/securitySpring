@@ -1,6 +1,7 @@
 package library.service;
 
 import library.entity.HeadBook;
+import library.exception.ApiRequestException;
 import library.repository.HeadBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,15 @@ public class HeadBookService {
 
 
     public void addHeadBook(HeadBook headBook) {
+        if (headBook.getId() == null || headBook.getName() == null ||
+                headBook.getAuthor() == null || headBook.getPublisher()== null ||
+                headBook.getPrice() == null || headBook.getNumberOfPages() == null) {
+            throw new ApiRequestException("id/name/author/publisher/price/numberofpage field of headbook is null");
+        }
+        if (isExist(headBook.getId())) {
+            throw new ApiRequestException("The given id is exist !");
+        }
+
         headBookRepository.save(headBook);
     }
 

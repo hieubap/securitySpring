@@ -1,6 +1,7 @@
 package library.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -107,6 +108,7 @@ public class Student implements Serializable {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonBackReference
     public CardLibrary getCardLibrary() {
         return cardLibrary;
     }
