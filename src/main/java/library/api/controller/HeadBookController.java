@@ -1,7 +1,7 @@
 package library.api.controller;//package com.example.final_library.controller;
 
 import library.api.entity.HeadBook;
-import library.api.exceptionhandle.responceEntity.EntityResponse;
+import library.api.responceEntity.EntityResponse;
 import library.api.service.HeadBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

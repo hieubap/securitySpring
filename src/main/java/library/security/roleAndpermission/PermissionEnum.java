@@ -3,7 +3,9 @@ package library.security.roleAndpermission;
 public enum PermissionEnum {
     STUDENT_READ("student::read"),
     STUDENT_WRITE("student::write"),
-    ADMIN_READ("admin");
+    MANAGER_READ("manager::read"),
+    MANAGER_WRITE("manager::write"),
+    ADMIN_ROLE("admin");
 
     public final String permission;
 
@@ -14,4 +16,5 @@ public enum PermissionEnum {
     public String getPermission() {
         return permission;
     }
+
 }

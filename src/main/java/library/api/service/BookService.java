@@ -1,7 +1,7 @@
 package library.api.service;
 
 import library.api.entity.Book;
-import library.api.exception.ApiRequestException;
+import library.api.exceptionhandle.exception.ApiRequestException;
 import library.api.repository.BookRepository;
 import library.api.repository.HeadBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class BookService {
     }
 
     public Book addBook(Book book) {
-        if (book.getHeadBookId() == null && book.getHeadBook() == null) {
+        if ( book.getHeadBook() == null) {
             throw new ApiRequestException("headbookid field of book is not null");
         }
         else if (book.getHeadBook() != null){

@@ -1,7 +1,7 @@
 package library.api.controller;
 
 import library.api.entity.Session;
-import library.api.exceptionhandle.responceEntity.EntityResponse;
+import library.api.responceEntity.EntityResponse;
 import library.api.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

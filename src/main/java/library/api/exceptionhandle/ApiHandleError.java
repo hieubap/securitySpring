@@ -1,8 +1,9 @@
 package library.api.exceptionhandle;
 
-import library.api.exception.ApiRequestSuccessfull;
-import library.api.exception.ApiRequestException;
-import library.api.exceptionhandle.responceEntity.EntityResponse;
+import library.api.exceptionhandle.exception.ApiRequestSuccessfull;
+import library.api.exceptionhandle.exception.ApiRequestException;
+import library.api.exceptionhandle.exception.ExistException;
+import library.api.responceEntity.EntityResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,6 +27,13 @@ class ApiHandleError extends ResponseEntityExceptionHandler {
         EntityResponse responseEntity = new EntityResponse(200,
                 new Timestamp(System.currentTimeMillis()),e.getMessage(),null);
 
+        return new ResponseEntity<>(responseEntity, HttpStatus.resolve(200));
+    }
+
+    @ExceptionHandler(value = {ExistException.class})
+    public ResponseEntity<Object> handleExist(ExistException e){
+        EntityResponse responseEntity = new EntityResponse(1,
+                new Timestamp(System.currentTimeMillis()),"Exist Error",null);
         return new ResponseEntity<>(responseEntity, HttpStatus.resolve(200));
     }
 
