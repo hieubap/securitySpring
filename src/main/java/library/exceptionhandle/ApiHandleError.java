@@ -1,8 +1,6 @@
-package library.api.exceptionhandle;
+package library.exceptionhandle;
 
-import library.api.exceptionhandle.exception.ApiRequestSuccessfull;
-import library.api.exceptionhandle.exception.ApiRequestException;
-import library.api.exceptionhandle.exception.ExistException;
+import library.exceptionhandle.exception.*;
 import library.api.responceEntity.EntityResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +30,24 @@ class ApiHandleError extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ExistException.class})
     public ResponseEntity<Object> handleExist(ExistException e){
+        return createResEntity("Exist Error",200);
+    }
+
+    @ExceptionHandler(value = PasswordNotCorrectException.class)
+    public ResponseEntity<Object> handlePasswordIncorrect(){
+        return createResEntity("your password is not correct",200);
+    }
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    public ResponseEntity<Object> handleUsernameNotFound(UsernameNotFoundException e){
+        return createResEntity("username" + e.getMessage() + "is not found",200);
+    }
+
+
+
+    public ResponseEntity<Object> createResEntity(String message,int status){
         EntityResponse responseEntity = new EntityResponse(1,
-                new Timestamp(System.currentTimeMillis()),"Exist Error",null);
-        return new ResponseEntity<>(responseEntity, HttpStatus.resolve(200));
+                new Timestamp(System.currentTimeMillis()),message,null);
+        return new ResponseEntity<>(responseEntity, HttpStatus.resolve(status));
     }
 
 }

@@ -1,4 +1,4 @@
-package library.api.exceptionhandle.exception;
+package library.exceptionhandle.exception;
 
 public class ExistException extends RuntimeException{
     public ExistException() {

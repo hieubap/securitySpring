@@ -1,10 +1,9 @@
 package library.security.model;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
-@Table(name =  "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name =  "user")
 public class User {
 	
 	@Id
@@ -12,25 +11,34 @@ public class User {
 	private Long id;
 	private String username;
 	private String password;
+	private Long role_id;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "users_roles",
-			joinColumns = @JoinColumn(
-		            name = "user_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(
-				            name = "role_id", referencedColumnName = "id"))
-	
-	private Collection<Role> roles;
+	@ManyToOne//(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinTable(
+//			name = "users_roles",
+//			joinColumns = @JoinColumn(
+//		            name = "user_id", referencedColumnName = "id"),
+//			inverseJoinColumns = @JoinColumn(
+//				            name = "role_id", referencedColumnName = "id"))
+	@JoinColumn(name = "role_id",updatable = false,insertable = false)
+	private Role role;
 
 	public User() {
-
+		role = new Role("ROLE_USER");
 	}
 
-	public User(String username, String password, Collection<Role> roles) {
+	public User(String username, String password, Long roles) {
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
+		this.role_id = roles;
+	}
+
+	public Long getRole_id() {
+		return role_id;
+	}
+
+	public void setRole_id(Long role_id) {
+		this.role_id = role_id;
 	}
 
 	public Long getId() {
@@ -57,11 +65,11 @@ public class User {
 		this.password = password;
 	}
 
-	public Collection<Role> getRoles() {
-		return roles;
-	}
-	public void setRoles(Collection<Role> roles) {
-		this.roles = roles;
+	public Role getRole() {
+		return role;
 	}
 
+	public void setRole(Role role) {
+		this.role = role;
+	}
 }

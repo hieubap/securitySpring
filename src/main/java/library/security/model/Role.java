@@ -1,25 +1,35 @@
 package library.security.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "role")
 public class Role {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+
+	@OneToMany(mappedBy = "role")
+	private Collection<Authority> authorities;
 	
 	public Role() {
 		
 	}
 	
 	public Role(String name) {
-		super();
 		this.name = name;
 	}
-	
+
+	public Collection<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Collection<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
 	public Long getId() {
 		return id;
 	}

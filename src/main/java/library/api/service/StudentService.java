@@ -1,7 +1,7 @@
 package library.api.service;
 
 import library.api.entity.Student;
-import library.api.exceptionhandle.exception.ApiRequestException;
+import library.exceptionhandle.exception.ApiRequestException;
 import library.api.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

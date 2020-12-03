@@ -1,7 +1,7 @@
 package library.api.service;
 
 import library.api.entity.Book;
-import library.api.exceptionhandle.exception.ApiRequestException;
+import library.exceptionhandle.exception.ApiRequestException;
 import library.api.repository.BookRepository;
 import library.api.repository.HeadBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;

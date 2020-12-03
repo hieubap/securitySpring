@@ -1,10 +1,8 @@
-package library.security.roleAndpermission;
+package library.security.enums;
 
 public enum PermissionEnum {
-    STUDENT_READ("student::read"),
-    STUDENT_WRITE("student::write"),
-    MANAGER_READ("manager::read"),
-    MANAGER_WRITE("manager::write"),
+    USER_READ("USER_READ"),
+    USER_WRITE("USER_WRITE"),
     ADMIN_ROLE("admin");
 
     public final String permission;

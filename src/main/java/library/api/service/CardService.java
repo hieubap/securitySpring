@@ -3,7 +3,7 @@ package library.api.service;
 import library.api.entity.Book;
 import library.api.entity.CardLibrary;
 import library.api.entity.Session;
-import library.api.exceptionhandle.exception.ApiRequestException;
+import library.exceptionhandle.exception.ApiRequestException;
 import library.api.repository.CardRepository;
 import library.api.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;

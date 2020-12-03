@@ -1,4 +1,4 @@
-package library.security.roleAndpermission;
+package library.security.enums;
 
 import com.google.common.collect.Sets;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -6,12 +6,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static library.security.roleAndpermission.PermissionEnum.*;
+import static library.security.enums.PermissionEnum.*;
 
 public enum RoleEnum {
-    STUDENT(Sets.newHashSet(STUDENT_READ,STUDENT_WRITE)),
-    MANAGER(Sets.newHashSet(MANAGER_READ,MANAGER_WRITE)),
-    ADMIN(Sets.newHashSet(STUDENT_READ,STUDENT_WRITE,MANAGER_WRITE,MANAGER_READ));
+    USER(Sets.newHashSet(USER_READ,USER_WRITE)),
+    ADMIN(Sets.newHashSet(USER_READ,USER_WRITE,ADMIN_ROLE));
 
     public final Set<PermissionEnum> permissions;
 
