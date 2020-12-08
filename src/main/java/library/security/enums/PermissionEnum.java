@@ -3,7 +3,7 @@ package library.security.enums;
 public enum PermissionEnum {
     USER_READ("USER_READ"),
     USER_WRITE("USER_WRITE"),
-    ADMIN_ROLE("admin");
+    ADMIN_ROLE("ADMIN");
 
     public final String permission;
 
@@ -14,5 +14,4 @@ public enum PermissionEnum {
     public String getPermission() {
         return permission;
     }
-
 }

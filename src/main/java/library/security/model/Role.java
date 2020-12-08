@@ -11,7 +11,7 @@ public class Role {
 	private Long id;
 	private String name;
 
-	@OneToMany(mappedBy = "role")
+	@OneToMany(mappedBy = "role", fetch = FetchType.EAGER) // hibernate_proxy
 	private Collection<Authority> authorities;
 	
 	public Role() {

@@ -1,10 +1,8 @@
 package library.security.enums;
 
 import com.google.common.collect.Sets;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static library.security.enums.PermissionEnum.*;
 
@@ -20,13 +18,5 @@ public enum RoleEnum {
 
     public Set<PermissionEnum> getPermissions() {
         return permissions;
-    }
-
-    public Set<SimpleGrantedAuthority> getGrantedAuthorities(){
-        Set<SimpleGrantedAuthority> permission = getPermissions().stream()
-                .map(permissionEnum -> new SimpleGrantedAuthority(permissionEnum.getPermission()))
-                .collect(Collectors.toSet());
-        permission.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
-        return permission;
     }
 }
