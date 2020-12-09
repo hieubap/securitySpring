@@ -66,3 +66,4 @@ No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterc
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 private T data;
  */
+

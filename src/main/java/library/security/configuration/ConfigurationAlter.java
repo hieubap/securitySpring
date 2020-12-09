@@ -5,12 +5,10 @@ import library.security.filter.JwtUsernamePasswordAuthenticationFilter;
 import library.security.userdetail.UserDetailServiceAlter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.crypto.SecretKey;
@@ -20,7 +18,7 @@ import static library.security.enums.RoleEnum.ADMIN;
 import static library.security.enums.RoleEnum.USER;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class ConfigurationAlter extends WebSecurityConfigurerAdapter {
     private UserDetailServiceAlter userService;
     private SecretKey secretKey;
@@ -49,8 +47,8 @@ public class ConfigurationAlter extends WebSecurityConfigurerAdapter {
         System.out.println("authority");
 
         http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
                 .addFilterAt(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfigProperties,secretKey),
                         BasicAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenVerifierFilter(jwtConfigProperties,secretKey), JwtUsernamePasswordAuthenticationFilter.class);
@@ -58,7 +56,7 @@ public class ConfigurationAlter extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+//                .antMatchers(HttpMethod.POST, "/login").permitAll()
 
                 .antMatchers("/student/**")
                 .hasAnyRole(USER.name())

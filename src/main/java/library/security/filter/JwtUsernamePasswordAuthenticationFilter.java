@@ -3,10 +3,8 @@ package library.security.filter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
-import library.api.responceEntity.EntityResponse;
 import library.security.DAO.UsernameAndPasswordDAO;
 import library.security.configuration.JwtPropertiesConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -46,6 +43,8 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
             );
 
             Authentication authenticate = authenticationManager.authenticate(authentication);
+//            BasicAuthenticationFilter
+//            TokenBasedRememberMeServices
 
             return authenticate;
 
@@ -73,13 +72,14 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setContentType("json");
+//        throw new UsernameNotFoundException("not found hehe");
 
-        EntityResponse<Object> entityResponse = new EntityResponse(HttpStatus.NOT_FOUND,"dont success",null);
-        String entityresponce = convertObjecttoString(entityResponse);
-
-        PrintWriter printWriter = response.getWriter();
-        printWriter.write(entityresponce);
-        printWriter.flush();
+//        EntityResponse<Object> entityResponse = new EntityResponse(HttpStatus.NOT_FOUND,"dont success",null);
+//        String entityresponce = convertObjecttoString(entityResponse);
+//
+//        PrintWriter printWriter = response.getWriter();
+//        printWriter.write(entityresponce);
+//        printWriter.flush();
     }
     public String convertObjecttoString(Object o) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

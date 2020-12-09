@@ -1,6 +1,5 @@
 package library.security.userdetail;
 
-import library.exceptionhandle.exception.UsernameNotFoundException;
 import library.security.model.Authority;
 import library.security.model.User;
 import library.security.repository.RoleRepository;
@@ -8,6 +7,7 @@ import library.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +17,6 @@ import java.util.List;
 public class UserDetailServiceAlter implements UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-
-//    @Autowired
-//    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,9 +41,8 @@ public class UserDetailServiceAlter implements UserDetailsService {
         User user = userRepository.findByUsername(username);
 
         if(user == null) {
-            System.out.println("not find user");
-//            authenticationFailureHandler.onAuthenticationFailure();
-            throw new UsernameNotFoundException("error");
+            System.out.println("null user");
+            throw new UsernameNotFoundException("username not found exception in service");
         }
 
 
@@ -58,11 +54,7 @@ public class UserDetailServiceAlter implements UserDetailsService {
         for(Authority auth : user.getRole().getAuthorities()) {
             System.out.println("    "+auth.getAuthority());
         }
-
         return userDetails;
     }
 
-//    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Authority> roles){
-//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-//    }
 }

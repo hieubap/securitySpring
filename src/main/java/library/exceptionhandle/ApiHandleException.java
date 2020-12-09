@@ -1,17 +1,17 @@
 package library.exceptionhandle;
 
-import library.exceptionhandle.exception.*;
 import library.api.responceEntity.EntityResponse;
+import library.exceptionhandle.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.sql.Timestamp;
 
-@ControllerAdvice
-class ApiHandleError extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+class ApiHandleException extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {ApiRequestException.class})
     public ResponseEntity<Object> handleException(ApiRequestException e){
 
@@ -32,16 +32,6 @@ class ApiHandleError extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleExist(ExistException e){
         return createResEntity("Exist Error",200);
     }
-
-    @ExceptionHandler(value = PasswordNotCorrectException.class)
-    public ResponseEntity<Object> handlePasswordIncorrect(){
-        return createResEntity("your password is not correct",200);
-    }
-    @ExceptionHandler(value = UsernameNotFoundException.class)
-    public ResponseEntity<Object> handleUsernameNotFound(UsernameNotFoundException e){
-        return createResEntity("username" + e.getMessage() + "is not found",200);
-    }
-
 
 
     public ResponseEntity<Object> createResEntity(String message,int status){

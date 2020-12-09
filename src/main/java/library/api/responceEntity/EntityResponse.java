@@ -15,12 +15,19 @@ public class EntityResponse<T> {
     private T data;
 
 
+    public EntityResponse(String message) {
+        this.status = 200;
+        this.message = message;
+        this.time = new Timestamp(System.currentTimeMillis());
+    }
+
     public EntityResponse(int status, Timestamp time, String message, T data) {
         this.status = status;
         this.time = time;
         this.message = message;
         this.data = data;
     }
+
     public EntityResponse(HttpStatus status, String message, T data) {
         this.status = status.value();
         this.time = new Timestamp(System.currentTimeMillis());

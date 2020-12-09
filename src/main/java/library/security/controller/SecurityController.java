@@ -17,12 +17,14 @@ public class SecurityController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public EntityResponse<Object> login(@RequestBody User user){
+        System.out.println("run controller");
 //        throw new UsernameNotFoundException("message");
         return new EntityResponse<>(HttpStatus.OK,"login successful",null);
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public EntityResponse<Object> register(@RequestBody User user){
+        System.out.println("register ok");
         serviceUser.save(user);
         return new EntityResponse<>(HttpStatus.OK,"register successful",null);
     }
